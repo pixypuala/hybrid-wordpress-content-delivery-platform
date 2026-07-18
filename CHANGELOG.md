@@ -10,4 +10,5 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Repository scaffolding: governance files, docs, and CI skeleton.
 - Versioned content contract: ArticleResource DTO, ArticleTransformer (validates, normalises timestamps to ISO-8601, cleans tags), and a versioned API Envelope.
 - Published article JSON Schema (contract v1).
-- 11 PHPUnit tests; PHPCS/WPCS clean; CI on PHP 8.1 and 8.3.
+- SurrogateKeyResolver: deterministic cache keys (versioned) and invalidation tag sets (article tag, per-term tags, global all-articles tag) for headless edge purging.
+- 21 PHPUnit tests; PHPCS/WPCS clean; CI on PHP 8.1 and 8.3.

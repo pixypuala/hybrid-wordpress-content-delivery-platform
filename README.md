@@ -12,7 +12,7 @@ Requires PHP 8.1+ and Composer.
 
 ```bash
 composer install
-composer test    # 11 unit tests: article transformer + versioned envelope
+composer test    # 21 unit tests: transformer + envelope + surrogate-key resolver
 composer lint    # WordPress coding standards (PHPCS)
 ```
 
@@ -28,13 +28,19 @@ The **content contract** layer — the heart of the hybrid architecture — is i
 - `Envelope` (`src/Api/`) wraps every response with `contractVersion` + `generatedAt` so a CDN
   and client can reason about compatibility and freshness.
 - A published JSON Schema (`schema/article.schema.json`) documents contract v1.
+- `SurrogateKeyResolver` (`src/Cache/`) derives, deterministically, the cache key for an
+  article at a given contract version plus the set of surrogate/invalidation tags to purge
+  when it changes — the article's own tag, one per taxonomy term, and a global all-articles
+  tag for listing responses. This is the invalidation *contract* the edge and the Next.js
+  consumer will share; the transport wiring that calls it is not built yet.
 
 The generally-useful part extracts to the `wp-content-contracts` open-source repo.
 
 ## Documented boundary (not yet built)
 
-The REST/GraphQL delivery routes, the Next.js consumer app, ISR/cache invalidation wiring, and
-the "when headless is (not) justified" decision record.
+The REST/GraphQL delivery routes, the Next.js consumer app, the webhook/ISR wiring that
+*invokes* the surrogate-key resolver on publish/update/delete, and the "when headless is (not)
+justified" decision record.
 
 ## PCAAP
 
