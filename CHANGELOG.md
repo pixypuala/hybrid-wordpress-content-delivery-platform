@@ -11,4 +11,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Versioned content contract: ArticleResource DTO, ArticleTransformer (validates, normalises timestamps to ISO-8601, cleans tags), and a versioned API Envelope.
 - Published article JSON Schema (contract v1).
 - SurrogateKeyResolver: deterministic cache keys (versioned) and invalidation tag sets (article tag, per-term tags, global all-articles tag) for headless edge purging.
-- 21 PHPUnit tests; PHPCS/WPCS clean; CI on PHP 8.1 and 8.3.
+- ArticleDeliveryHandler: framework-free delivery-route core that builds a versioned Envelope from a ContentSource port (single article and collection), plus a thin, guarded RestRoute glue around register_rest_route.
+- InvalidationDispatcher: framework-free invalidation wiring that turns a ContentChangeEvent (publish/update/delete) into a surrogate-tag purge via a CachePurger port.
+- Architecture decision record: when headless WordPress is (and is not) justified (docs/architecture/ADR-headless-justified.md).
+- 32 PHPUnit tests; PHPCS/WPCS clean; CI on PHP 8.1 and 8.3.

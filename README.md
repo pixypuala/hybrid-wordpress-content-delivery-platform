@@ -12,7 +12,7 @@ Requires PHP 8.1+ and Composer.
 
 ```bash
 composer install
-composer test    # 21 unit tests: transformer + envelope + surrogate-key resolver
+composer test    # 32 unit tests: transformer + envelope + resolver + delivery handler + invalidation dispatcher
 composer lint    # WordPress coding standards (PHPCS)
 ```
 
@@ -32,15 +32,29 @@ The **content contract** layer — the heart of the hybrid architecture — is i
   article at a given contract version plus the set of surrogate/invalidation tags to purge
   when it changes — the article's own tag, one per taxonomy term, and a global all-articles
   tag for listing responses. This is the invalidation *contract* the edge and the Next.js
-  consumer will share; the transport wiring that calls it is not built yet.
+  consumer share.
+- `ArticleDeliveryHandler` (`src/Delivery/`) is the framework-free core of a delivery route:
+  given an article id (or the whole collection) it fetches raw rows through a `ContentSource`
+  port, runs them through the transformer, and returns a versioned `Envelope`. It is fully
+  unit-tested without a web server. `RestRoute` (`src/Delivery/`) is the thin, guarded
+  `register_rest_route` glue that adapts the handler's result and exceptions to WordPress REST
+  responses; the DB-backed `ContentSource` that feeds it is wired by the plugin bootstrap.
+- `InvalidationDispatcher` (`src/Cache/`) is the framework-free invalidation wiring: on a
+  `ContentChangeEvent` (publish/update/delete) it derives the purge tag set via
+  `SurrogateKeyResolver` and hands it to an injected `CachePurger` port. Unit-tested with a
+  recording fake purger.
+- `docs/architecture/ADR-headless-justified.md` records when headless WordPress is — and is
+  not — justified, with per-surface criteria, tradeoffs, and alternatives considered.
 
 The generally-useful part extracts to the `wp-content-contracts` open-source repo.
 
 ## Documented boundary (not yet built)
 
-The REST/GraphQL delivery routes, the Next.js consumer app, the webhook/ISR wiring that
-*invokes* the surrogate-key resolver on publish/update/delete, and the "when headless is (not)
-justified" decision record.
+The Next.js consumer application and a live GraphQL server runtime remain environment-
+dependent: the WordPress-backed `ContentSource`, the `add_action` hook registration that
+invokes the invalidation dispatcher, and the concrete CDN `CachePurger` are wired in a live
+WordPress environment. The framework-free delivery handler and invalidation dispatcher they
+depend on are built and tested (above).
 
 ## PCAAP
 
