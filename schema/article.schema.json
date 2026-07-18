@@ -1,0 +1,19 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://github.com/pixypuala/hybrid-wordpress-content-delivery-platform/schema/article.schema.json",
+	"title": "Article (content contract v1)",
+	"description": "The stable public shape of an article. Consumers code against this; WordPress internals may change without breaking it.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["id", "slug", "title", "excerpt", "html", "publishedAt", "author", "tags"],
+	"properties": {
+		"id": { "type": "integer", "minimum": 1 },
+		"slug": { "type": "string", "minLength": 1 },
+		"title": { "type": "string", "minLength": 1 },
+		"excerpt": { "type": "string" },
+		"html": { "type": "string" },
+		"publishedAt": { "type": "string", "format": "date-time" },
+		"author": { "type": "string" },
+		"tags": { "type": "array", "items": { "type": "string" } }
+	}
+}

@@ -6,6 +6,36 @@ A WordPress-backed content platform with a modern React/Next.js delivery layer t
 
 This project is not considered complete when the UI looks good. It must demonstrate discovery, architecture, code quality, accessibility, security, performance, test design, deployment, recovery, documentation, and public communication.
 
+## Getting started
+
+Requires PHP 8.1+ and Composer.
+
+```bash
+composer install
+composer test    # 11 unit tests: article transformer + versioned envelope
+composer lint    # WordPress coding standards (PHPCS)
+```
+
+## What is built today
+
+The **content contract** layer — the heart of the hybrid architecture — is implemented and tested:
+
+- `ArticleResource` (`src/Resource/`) is the stable, versioned public shape a React/Next client
+  codes against, decoupled from WordPress' internal post shape.
+- `ArticleTransformer` (`src/Transform/`) is the seam: it validates required fields at the
+  boundary, normalises timestamps to ISO-8601 UTC, and cleans tag lists, rejecting malformed
+  source content loudly instead of leaking an inconsistent shape.
+- `Envelope` (`src/Api/`) wraps every response with `contractVersion` + `generatedAt` so a CDN
+  and client can reason about compatibility and freshness.
+- A published JSON Schema (`schema/article.schema.json`) documents contract v1.
+
+The generally-useful part extracts to the `wp-content-contracts` open-source repo.
+
+## Documented boundary (not yet built)
+
+The REST/GraphQL delivery routes, the Next.js consumer app, ISR/cache invalidation wiring, and
+the "when headless is (not) justified" decision record.
+
 ## PCAAP
 
 ### Problem

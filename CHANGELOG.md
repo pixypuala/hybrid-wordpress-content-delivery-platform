@@ -8,3 +8,6 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - Repository scaffolding: governance files, docs, and CI skeleton.
+- Versioned content contract: ArticleResource DTO, ArticleTransformer (validates, normalises timestamps to ISO-8601, cleans tags), and a versioned API Envelope.
+- Published article JSON Schema (contract v1).
+- 11 PHPUnit tests; PHPCS/WPCS clean; CI on PHP 8.1 and 8.3.
