@@ -1,0 +1,104 @@
+# Hybrid WordPress Content Delivery Platform
+
+## Portfolio purpose
+
+A WordPress-backed content platform with a modern React/Next.js delivery layer that proves API design, cache invalidation, previews, SEO, resilience, and architectural tradeoffs.
+
+This project is not considered complete when the UI looks good. It must demonstrate discovery, architecture, code quality, accessibility, security, performance, test design, deployment, recovery, documentation, and public communication.
+
+## PCAAP
+
+### Problem
+
+Teams often adopt headless WordPress for frontend freedom but lose editor preview, plugin behavior, redirects, search, draft security, cache clarity, and operational simplicity.
+
+### Cost
+
+Publishing delays, stale pages, broken metadata, duplicated business rules, hard-to-debug cache bugs, and an unnecessarily complex platform.
+
+### Answer
+
+Build a hybrid architecture: WordPress remains the editorial and canonical content system; a Next.js frontend renders selected experiences; conventional WordPress rendering remains available for fallback and comparison. Define typed contracts, preview authorization, webhook invalidation, observability, and graceful degradation.
+
+### Advantage
+
+The project proves that the developer can choose headless selectively rather than treating it as a fashion. The case study measures where hybrid delivery helps and where native WordPress is simpler.
+
+### Proof required
+
+- same content rendered natively and in Next.js
+- typed schema/contract generation
+- secure draft preview test
+- publish/update/delete cache invalidation traces
+- redirect and metadata parity crawl
+- frontend failure fallback demonstration
+- LCP/INP/CLS field or controlled lab evidence
+- API rate/error/latency dashboard using synthetic data
+
+### Ask
+
+Inspect the architecture tradeoff record, trigger a publish-to-cache-invalidation flow, and review SEO/rendered-source parity.
+
+## Intended audience
+
+content-heavy SaaS, global campaign platform, documentation publisher, media/marketing team.
+
+## Core stack and capabilities
+
+- WordPress REST API as baseline; GraphQL only as an optional documented adapter
+- PHP plugin defining canonical API fields and preview permissions
+- Next.js with TypeScript and server rendering
+- schema validation at API boundaries
+- tag/path cache invalidation with signed webhooks
+- image, redirect, sitemap and metadata pipeline
+- Playwright, contract tests, accessibility tests and crawl checks
+- OpenTelemetry-compatible traces or a lightweight documented equivalent
+- local WordPress/Next.js environment and CI
+
+## Product scope
+
+- content model shared through explicit versioned contracts
+- draft preview with short-lived authorization
+- published content cache with deterministic invalidation
+- redirect synchronization and 404 handling
+- SEO metadata, canonical URLs, structured data and sitemaps
+- search adapter with native fallback
+- responsive media with alt-text and focal-point handling
+- locale-aware routes and content fallbacks
+- frontend outage mode and operational status page
+- architecture comparison dashboard: native, hybrid and headless costs
+
+## Major risks
+
+- duplicating WordPress authorization logic in JavaScript
+- exposing drafts or private media
+- stale cache after deletes or redirects
+- breaking plugin-rendered behavior silently
+- claiming headless is automatically faster
+- introducing GraphQL without a demonstrated need
+
+## Milestone order
+
+1. native reference implementation and content model
+2. versioned API contract
+3. Next.js public rendering
+4. preview and invalidation
+5. SEO/redirect/media parity
+6. resilience and observability
+7. performance/accessibility comparison
+8. case study and reusable API-contract package
+
+## Public repository opportunity
+
+Extract the generally useful portion as `wp-content-contracts`. The public repository must have an open-source license, contribution guide, security policy, support boundary, reproducible local setup, release notes, and a roadmap that distinguishes committed work from ideas.
+
+## Definition of portfolio-ready
+
+- a stranger can run the project from a fresh clone;
+- every major claim links to a test, report, trace, screenshot, or explicit limitation;
+- no production credentials, personal data, copied proprietary code, or fake testimonials exist;
+- repository issues reflect honest known gaps;
+- the demo includes at least one controlled failure and recovery;
+- architecture decisions explain alternatives and tradeoffs;
+- the case study can be understood by both technical and nontechnical readers;
+- the latest tagged release passes the documented support matrix.
