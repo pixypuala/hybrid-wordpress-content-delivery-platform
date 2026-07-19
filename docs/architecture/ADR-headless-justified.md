@@ -3,7 +3,6 @@
 - **Status:** Accepted
 - **Date:** 2026-07-18
 - **Deciders:** Platform architecture
-- **Related:** `docs/02-ARCHITECTURE-AND-ADRS.md` (ADR 5 rendering approach, ADR 8 caching and invalidation)
 
 ## Context
 
