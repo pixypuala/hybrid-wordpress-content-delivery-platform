@@ -45,16 +45,25 @@ The **content contract** layer — the heart of the hybrid architecture — is i
   recording fake purger.
 - `docs/architecture/ADR-headless-justified.md` records when headless WordPress is — and is
   not — justified, with per-surface criteria, tradeoffs, and alternatives considered.
+- A **Next.js consumer** (`consumer/`) closes the JavaScript side of the boundary: a minimal
+  App Router + TypeScript app that mirrors the versioned contract in TypeScript, has a typed
+  `fetchArticles`/`fetchArticle` client that reads the envelope and enforces the contract
+  version, and renders an article list + detail page. It builds and tests offline against a
+  fixture shaped like the real envelope; pointing `DELIVERY_API_BASE_URL` at a running
+  delivery backend switches it to live data. See `consumer/README.md`. Verified with a
+  TypeScript type-check, a Vitest unit suite, and a Next production build.
 
 The generally-useful part extracts to the `wp-content-contracts` open-source repo.
 
 ## Documented boundary (not yet built)
 
-The Next.js consumer application and a live GraphQL server runtime remain environment-
-dependent: the WordPress-backed `ContentSource`, the `add_action` hook registration that
-invokes the invalidation dispatcher, and the concrete CDN `CachePurger` are wired in a live
-WordPress environment. The framework-free delivery handler and invalidation dispatcher they
-depend on are built and tested (above).
+A live GraphQL server runtime and the live WordPress wiring remain environment-dependent:
+the WordPress-backed `ContentSource`, the `add_action` hook registration that invokes the
+invalidation dispatcher, and the concrete CDN `CachePurger` are wired in a live WordPress
+environment. The framework-free delivery handler and invalidation dispatcher they depend on
+are built and tested (above). The Next.js consumer (`consumer/`) is built and renders from a
+fixture offline; showing *live* data additionally requires one of these delivery backends
+running and reachable via `DELIVERY_API_BASE_URL`.
 
 ## PCAAP
 

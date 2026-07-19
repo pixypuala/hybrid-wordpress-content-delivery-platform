@@ -14,4 +14,6 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - ArticleDeliveryHandler: framework-free delivery-route core that builds a versioned Envelope from a ContentSource port (single article and collection), plus a thin, guarded RestRoute glue around register_rest_route.
 - InvalidationDispatcher: framework-free invalidation wiring that turns a ContentChangeEvent (publish/update/delete) into a surrogate-tag purge via a CachePurger port.
 - Architecture decision record: when headless WordPress is (and is not) justified (docs/architecture/ADR-headless-justified.md).
+- Next.js consumer (`consumer/`): minimal App Router + TypeScript app that mirrors the versioned content contract in TypeScript, has a typed fetchArticles/fetchArticle client that reads the envelope and enforces the contract version, and renders an article list + detail page. Builds and tests offline against an envelope-shaped fixture; `DELIVERY_API_BASE_URL` switches it to a live delivery backend. Verified with tsc type-check, a Vitest unit suite, and a Next production build.
+- docs/STACK.md documenting both runtimes (PHP + Next.js consumer) and the delivery-gate commands.
 - 32 PHPUnit tests; PHPCS/WPCS clean; CI on PHP 8.1 and 8.3.

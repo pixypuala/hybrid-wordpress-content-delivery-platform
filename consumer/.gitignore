@@ -1,0 +1,12 @@
+# Dependencies
+/node_modules/
+# pnpm lockfile is intentionally not committed (the gate resolves fresh)
+pnpm-lock.yaml
+# Next.js build output and generated types
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+# Local env
+.env
+.env.local
