@@ -73,6 +73,7 @@ final class ArticleTransformer {
 	 */
 	private function require_int( array $raw, string $key ): int {
 		if ( ! isset( $raw[ $key ] ) || ! is_numeric( $raw[ $key ] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Framework-free domain: this message is caught at the WordPress boundary and never reaches a response.
 			throw new TransformException( sprintf( 'Missing or non-numeric field "%s".', $key ) );
 		}
 		return (int) $raw[ $key ];
@@ -89,6 +90,7 @@ final class ArticleTransformer {
 	private function require_string( array $raw, string $key ): string {
 		$value = $raw[ $key ] ?? null;
 		if ( ! is_string( $value ) || '' === trim( $value ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Framework-free domain: this message is caught at the WordPress boundary and never reaches a response.
 			throw new TransformException( sprintf( 'Missing or empty required field "%s".', $key ) );
 		}
 		return $value;
@@ -124,6 +126,7 @@ final class ArticleTransformer {
 		} else {
 			$timestamp = strtotime( (string) $value );
 			if ( false === $timestamp ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Framework-free domain: caught at the WordPress boundary; the response never carries this detail.
 				throw new TransformException( sprintf( 'Unparseable published_at value: %s', (string) $value ) );
 			}
 		}

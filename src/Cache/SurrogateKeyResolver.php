@@ -127,6 +127,7 @@ final class SurrogateKeyResolver {
 	 */
 	private function guard_positive( int $value, string $label ): void {
 		if ( $value <= 0 ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Framework-free domain: this message is caught at the WordPress boundary and never reaches a response.
 			throw new \InvalidArgumentException( sprintf( 'Article %s must be a positive integer.', $label ) );
 		}
 	}

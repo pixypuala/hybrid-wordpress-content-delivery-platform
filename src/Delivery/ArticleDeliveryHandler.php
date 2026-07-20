@@ -49,6 +49,7 @@ final class ArticleDeliveryHandler {
 	public function article( int $id ): Envelope {
 		$raw = $this->source->find( $id );
 		if ( null === $raw ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Framework-free domain: this message is caught at the WordPress boundary and never reaches a response.
 			throw new NotFoundException( sprintf( 'No article with id %d.', $id ) );
 		}
 

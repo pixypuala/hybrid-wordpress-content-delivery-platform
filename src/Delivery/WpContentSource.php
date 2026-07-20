@@ -82,6 +82,7 @@ final class WpContentSource implements ContentSource {
 			'slug'         => (string) $post->post_name,
 			'title'        => wp_strip_all_tags( get_the_title( $post ) ),
 			'excerpt'      => wp_strip_all_tags( get_the_excerpt( $post ) ),
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Applying WordPress' own content filter, not defining a hook.
 			'html'         => apply_filters( 'the_content', $post->post_content ),
 			'published_at' => (string) get_post_time( 'c', true, $post ),
 			'author'       => (string) get_the_author_meta( 'display_name', (int) $post->post_author ),

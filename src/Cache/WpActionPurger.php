@@ -39,6 +39,8 @@ final class WpActionPurger implements CachePurger {
 			return;
 		}
 
-		do_action( self::HOOK, $tags, $event->value );
+		// The literal is spelled out rather than passed as self::HOOK so the
+		// prefix is verifiable by static analysis; the constant is the API.
+		do_action( 'hybrid_delivery_purge', $tags, $event->value );
 	}
 }

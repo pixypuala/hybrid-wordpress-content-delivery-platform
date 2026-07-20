@@ -86,9 +86,27 @@ final class RestRoute {
 		try {
 			$envelope = $this->handler->article( $id );
 		} catch ( NotFoundException $error ) {
-			return new \WP_Error( 'hdp_not_found', $error->getMessage(), array( 'status' => 404 ) );
+			unset( $error );
+
+			return new \WP_Error(
+				'hdp_not_found',
+				__( 'No article was found with that id.', 'hybrid-delivery' ),
+				array( 'status' => 404 )
+			);
 		} catch ( TransformException $error ) {
-			return new \WP_Error( 'hdp_invalid_content', $error->getMessage(), array( 'status' => 500 ) );
+			/*
+			 * A contract violation names the offending field and its value. That
+			 * is exactly what an operator needs and exactly what a public client
+			 * must not receive, so the detail goes to the site's error log and
+			 * an action, and the response stays generic.
+			 */
+			do_action( 'hybrid_delivery_contract_violation', $id, $error->getMessage() );
+
+			return new \WP_Error(
+				'hdp_invalid_content',
+				__( 'The article could not be served in the published contract shape.', 'hybrid-delivery' ),
+				array( 'status' => 500 )
+			);
 		}
 
 		return rest_ensure_response( $envelope->to_array() );
