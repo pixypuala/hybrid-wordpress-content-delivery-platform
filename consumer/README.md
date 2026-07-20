@@ -37,10 +37,16 @@ Point it at a running delivery backend:
     DELIVERY_API_BASE_URL=https://your-wordpress-site.example/wp-json/hdp/v1
 
 The base URL is the REST namespace root; the client appends `/articles` and
-`/articles/{id}`. With a real backend running, the same pages render live data.
-The delivery API itself (the WordPress-backed `ContentSource` behind
-`RestRoute`) is wired in a live WordPress environment — see the repository root
-README for that boundary.
+`/articles/{id}`.
+
+This has been run end to end against a live WordPress 7.0.2 install with the
+repository's plugin (`hybrid-delivery.php`) active. Pointed at
+`http://portfolio.local/wp-json/hdp/v1`, `next build` collected the real post
+ids from the live collection endpoint and prerendered `/articles/1`,
+`/articles/5`, and `/articles/6`; the running server rendered those posts'
+titles, authors, dates, and tags, and returned 404 for an id the API does not
+have. No fixture is involved on that path — the contract guards validated real
+WordPress output. See `docs/RUNTIME-VERIFICATION.md` at the repository root.
 
 ## Content trust boundary
 
