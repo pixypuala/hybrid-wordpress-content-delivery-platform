@@ -64,6 +64,20 @@ final class WpContentSource implements ContentSource {
 			)
 		);
 
+		/*
+		 * get_posts() primes post, meta, and term caches for the whole result
+		 * set, but not authors. Without this, reading each row's author display
+		 * name costs two queries per distinct author — invisible on a
+		 * single-author test site, and measured at ten queries for five authors
+		 * before this line was added.
+		 */
+		$author_ids = array_values(
+			array_unique( array_map( static fn ( \WP_Post $post ): int => (int) $post->post_author, $posts ) )
+		);
+		if ( array() !== $author_ids ) {
+			cache_users( $author_ids );
+		}
+
 		return array_map( array( $this, 'to_row' ), $posts );
 	}
 
