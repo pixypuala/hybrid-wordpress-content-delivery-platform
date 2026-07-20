@@ -66,6 +66,27 @@ Note the unpublish case: the article is no longer readable, so the subscriber
 falls back to the id-only tag set rather than skipping the purge. Serving a
 deleted article from cache would be the worse failure.
 
+## Cost to the site
+
+Measured with `SAVEQUERIES` on, attributing each query to the plugin that caused
+it, against the same live install.
+
+| Request | Queries caused by this plugin |
+|---|---|
+| Front-end home | 0 |
+| Front-end single post | 0 |
+| `GET /wp-json/hdp/v1/articles` (7 articles, 5 authors) | 7 |
+
+A site that never calls the API pays nothing for having the plugin installed:
+the routes are registered on `rest_api_init`, the subscriber only attaches
+hooks, and no option is read on a normal page view. The plugin enqueues no
+front-end CSS or JavaScript and autoloads no options.
+
+The collection endpoint's seven queries are all batched primes — posts, meta,
+terms, and authors for the whole result set — so the count does not grow with
+the number of articles or authors returned. Before author caches were primed it
+issued fifteen, because each distinct author cost a lookup of its own.
+
 ## Error hygiene
 
 `WP_DEBUG` and `WP_DEBUG_LOG` were enabled for every run above. `debug.log`
