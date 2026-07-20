@@ -55,15 +55,29 @@ The **content contract** layer — the heart of the hybrid architecture — is i
 
 The generally-useful part extracts to the `wp-content-contracts` open-source repo.
 
+- A **WordPress plugin** (`hybrid-delivery.php`) ships the whole thing as an installable
+  plugin: it registers the delivery routes against a `WpContentSource` that reads real
+  published posts, and subscribes `PostChangeSubscriber` to `transition_post_status` and
+  `before_delete_post` so publishing, editing, unpublishing, and deleting each dispatch the
+  correct invalidation. `WpActionPurger` broadcasts the resolved tag set on the
+  `hybrid_delivery_purge` action.
+
+Every one of those adapters has been exercised against a live WordPress 7.0.2 install —
+routes, status codes, contract conformance checked by an independent tool, and all four
+invalidation paths — with the command output recorded in
+[`docs/RUNTIME-VERIFICATION.md`](docs/RUNTIME-VERIFICATION.md).
+
 ## Documented boundary (not yet built)
 
-A live GraphQL server runtime and the live WordPress wiring remain environment-dependent:
-the WordPress-backed `ContentSource`, the `add_action` hook registration that invokes the
-invalidation dispatcher, and the concrete CDN `CachePurger` are wired in a live WordPress
-environment. The framework-free delivery handler and invalidation dispatcher they depend on
-are built and tested (above). The Next.js consumer (`consumer/`) is built and renders from a
-fixture offline; showing *live* data additionally requires one of these delivery backends
-running and reachable via `DELIVERY_API_BASE_URL`.
+Two things are deliberately out of scope rather than unfinished. A **live GraphQL server
+runtime** is not implemented; the REST delivery route is the shipped transport. And the
+concrete **CDN `CachePurger`** is deployment-specific — Fastly, Cloudflare, Varnish, and
+Akamai take the same surrogate tags over different APIs — so the platform stops at the point
+where the tag set is known and correct and broadcasts it on `hybrid_delivery_purge` for a
+site's own client to consume. No CDN account is involved in this repository's verification.
+
+The Next.js consumer (`consumer/`) renders from a fixture offline and switches to live data
+by pointing `DELIVERY_API_BASE_URL` at an install running this plugin.
 
 ## PCAAP
 

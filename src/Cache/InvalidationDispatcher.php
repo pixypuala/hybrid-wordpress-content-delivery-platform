@@ -54,4 +54,31 @@ final class InvalidationDispatcher {
 
 		return $tags;
 	}
+
+	/**
+	 * Purge an article that can no longer be read.
+	 *
+	 * A deleted or unpublished article still has cached representations keyed by
+	 * its id, but there is no resource left to derive term tags from. Purging the
+	 * id and the all-articles tag is the safe subset: it may leave a term listing
+	 * warm for one cycle, but it never serves a deleted article. Skipping the
+	 * purge entirely would do exactly that.
+	 *
+	 * @param ContentChangeEvent $event What happened to the article.
+	 * @param int                $id    Positive article id.
+	 *
+	 * @return string[] The surrogate tags that were purged.
+	 *
+	 * @throws \InvalidArgumentException When id is not positive.
+	 */
+	public function dispatch_by_id( ContentChangeEvent $event, int $id ): array {
+		$tags = array(
+			$this->resolver->article_tag( $id ),
+			SurrogateKeyResolver::ALL_ARTICLES_TAG,
+		);
+
+		$this->purger->purge( $event, $tags );
+
+		return $tags;
+	}
 }

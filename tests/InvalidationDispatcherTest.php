@@ -90,4 +90,17 @@ final class InvalidationDispatcherTest extends TestCase {
 		);
 		$this->assertSame( ContentChangeEvent::Deleted, $this->purger->calls[0]['event'] );
 	}
+	public function test_dispatch_by_id_purges_the_article_and_global_tags(): void {
+		$tags = $this->dispatcher->dispatch_by_id( ContentChangeEvent::Deleted, 42 );
+
+		$expected = array( 'hdp:article:42', 'hdp:articles' );
+		$this->assertSame( $expected, $tags );
+		$this->assertSame( $expected, $this->purger->calls[0]['tags'] );
+		$this->assertSame( ContentChangeEvent::Deleted, $this->purger->calls[0]['event'] );
+	}
+
+	public function test_dispatch_by_id_rejects_a_non_positive_id(): void {
+		$this->expectException( \InvalidArgumentException::class );
+		$this->dispatcher->dispatch_by_id( ContentChangeEvent::Deleted, 0 );
+	}
 }

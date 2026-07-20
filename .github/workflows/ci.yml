@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.1', '8.3']
+        php: ['8.1', '8.2', '8.3', '8.4']
     steps:
       - uses: actions/checkout@v4
       - name: Set up PHP
@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
       - name: Lint PHP for syntax errors
-        run: find src tests -name '*.php' -print0 | xargs -0 -n1 -P4 php -l
+        run: find hybrid-delivery.php src tests -name '*.php' -print0 | xargs -0 -n1 -P4 php -l
       - name: Coding standards (PHPCS / WordPress)
         run: composer lint
       - name: Unit tests (PHPUnit)

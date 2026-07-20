@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <ruleset name="Hybrid WordPress Content Delivery Platform">
 	<description>WordPress coding standards for the hybrid content contract layer.</description>
+	<file>hybrid-delivery.php</file>
 	<file>src</file>
 	<file>tests</file>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
