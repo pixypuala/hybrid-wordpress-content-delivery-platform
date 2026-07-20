@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hybrid Delivery — cache invalidation</title>
+<link rel="stylesheet" href="identity.css">
+<style>
+	html, body { width: 100%; height: 100%; overflow: hidden; }
+
+	.shot {
+		container-type: inline-size;
+		width: 100%;
+		height: 100%;
+		padding: 5.6cqw;
+		background:
+			radial-gradient(90% 110% at 12% 108%, rgba(38, 224, 180, 0.14), transparent 58%),
+			linear-gradient(160deg, #0e1725 0%, #070c15 60%, #05080f 100%);
+		display: flex;
+		flex-direction: column;
+	}
+
+	header { margin-bottom: 3.2cqw; }
+	.eyebrow {
+		font-family: var(--mono);
+		font-size: 1.02cqw;
+		font-weight: 500;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--signal);
+	}
+	h1 {
+		margin-top: 1.1cqw;
+		font-size: 3.5cqw;
+		font-weight: 800;
+		letter-spacing: -0.032em;
+		line-height: 1.04;
+	}
+	.lede {
+		margin-top: 1.1cqw;
+		font-size: 1.42cqw;
+		font-weight: 500;
+		color: var(--on-ink-muted);
+		max-width: 64cqw;
+		line-height: 1.5;
+	}
+
+	/* Event → tags. Four rows, one per lifecycle transition. */
+	.log {
+		border-radius: 1.4cqw;
+		background: linear-gradient(165deg, #131d2c, #0a101a);
+		border: 1px solid rgba(148, 172, 205, 0.17);
+		box-shadow: 0 2cqw 4cqw rgba(0, 0, 0, 0.5);
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+	.log__head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 1.4cqw 1.9cqw;
+		border-bottom: 1px solid rgba(148, 172, 205, 0.13);
+		background: rgba(255, 255, 255, 0.022);
+	}
+	.log__title { font-size: 1.22cqw; font-weight: 700; }
+	.log__hook {
+		font-family: var(--mono);
+		font-size: 1cqw;
+		color: #8fa4bd;
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: 11cqw 1fr;
+		align-items: center;
+		gap: 1.8cqw;
+		padding: 2.05cqw 1.9cqw;
+		border-bottom: 1px solid rgba(148, 172, 205, 0.09);
+	}
+	.row:last-child { border-bottom: 0; }
+
+	.event {
+		font-family: var(--mono);
+		font-size: 1cqw;
+		font-weight: 600;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		padding: 0.5cqw 0;
+		text-align: center;
+		border-radius: 999px;
+		border: 1px solid;
+	}
+	.event--pub { color: var(--signal); border-color: rgba(38, 224, 180, 0.42); background: rgba(38, 224, 180, 0.1); }
+	.event--upd { color: #6b8cff; border-color: rgba(107, 140, 255, 0.42); background: rgba(107, 140, 255, 0.1); }
+	.event--del { color: #ff8a7a; border-color: rgba(255, 138, 122, 0.4); background: rgba(255, 138, 122, 0.1); }
+
+	.tags { display: flex; flex-wrap: wrap; gap: 0.72cqw; }
+	.tag {
+		font-family: var(--mono);
+		font-size: 1.04cqw;
+		padding: 0.5cqw 0.92cqw;
+		border-radius: 0.6cqw;
+		color: #cfdcea;
+		background: rgba(148, 172, 205, 0.09);
+		border: 1px solid rgba(148, 172, 205, 0.17);
+	}
+	.tag--key { color: var(--signal); border-color: rgba(38, 224, 180, 0.3); background: rgba(38, 224, 180, 0.09); }
+
+	footer {
+		margin-top: auto;
+		display: flex;
+		align-items: center;
+		gap: 1.6cqw;
+		padding-top: 2.5cqw;
+		color: #7d92ac;
+		font-size: 1.06cqw;
+		font-weight: 500;
+	}
+	footer strong { color: var(--on-ink); font-weight: 700; }
+	.rule { flex: 1; height: 1px; background: rgba(148, 172, 205, 0.16); }
+</style>
+</head>
+<body>
+	<div class="shot">
+		<header>
+			<div class="eyebrow">Surrogate-key invalidation</div>
+			<h1>Every change knows what to purge.</h1>
+			<p class="lede">Publish, edit, unpublish, or delete: the exact tag set is computed and broadcast for your CDN client to act on.</p>
+		</header>
+
+		<section class="log">
+			<div class="log__head">
+				<span class="log__title">Purge log</span>
+				<span class="log__hook">do_action( 'hybrid_delivery_purge', $tags, $event )</span>
+			</div>
+
+			<div class="row">
+				<span class="event event--pub">published</span>
+				<div class="tags">
+					<span class="tag tag--key">hdp:article:5</span>
+					<span class="tag">hdp:term:architecture</span>
+					<span class="tag">hdp:term:wordpress</span>
+					<span class="tag">hdp:articles</span>
+				</div>
+			</div>
+			<div class="row">
+				<span class="event event--upd">updated</span>
+				<div class="tags">
+					<span class="tag tag--key">hdp:article:5</span>
+					<span class="tag">hdp:term:architecture</span>
+					<span class="tag">hdp:term:wordpress</span>
+					<span class="tag">hdp:articles</span>
+				</div>
+			</div>
+			<div class="row">
+				<span class="event event--del">unpublished</span>
+				<div class="tags">
+					<span class="tag tag--key">hdp:article:5</span>
+					<span class="tag">hdp:articles</span>
+				</div>
+			</div>
+			<div class="row">
+				<span class="event event--del">deleted</span>
+				<div class="tags">
+					<span class="tag tag--key">hdp:article:7</span>
+					<span class="tag">hdp:term:architecture</span>
+					<span class="tag">hdp:articles</span>
+				</div>
+			</div>
+		</section>
+
+		<footer>
+			<span><strong>Bind once.</strong> Any CDN — Fastly, Cloudflare, Varnish, Akamai.</span>
+			<span class="rule"></span>
+			<span>No CDN bound? The purge is a harmless no-op.</span>
+		</footer>
+	</div>
+</body>
+</html>

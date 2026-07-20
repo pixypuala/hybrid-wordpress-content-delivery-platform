@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hybrid Delivery — banner</title>
+<link rel="stylesheet" href="identity.css">
+<style>
+	/*
+	 * One layout, two required widths (772 and 1544). Everything is sized in cqw
+	 * against the banner itself, so the 1544 render is the 772 render at exactly
+	 * twice the scale rather than a second layout that drifts.
+	 */
+	html, body { width: 100%; height: 100%; overflow: hidden; }
+
+	.banner {
+		container-type: inline-size;
+		position: relative;
+		width: 100%;
+		height: 100%;
+		background:
+			radial-gradient(120% 150% at 88% 12%, rgba(107, 140, 255, 0.20), transparent 58%),
+			radial-gradient(90% 120% at 6% 88%, rgba(38, 224, 180, 0.16), transparent 60%),
+			linear-gradient(148deg, #101927 0%, #070c15 58%, #05080f 100%);
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: center;
+		gap: 4cqw;
+		padding: 0 5.2cqw;
+		overflow: hidden;
+	}
+
+	/* A faint engineering grid: instrument panel, not decoration. */
+	.banner::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(148, 172, 205, 0.055) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(148, 172, 205, 0.055) 1px, transparent 1px);
+		background-size: 3.2cqw 3.2cqw;
+		mask-image: linear-gradient(100deg, #000 0%, transparent 62%);
+	}
+
+	.copy { position: relative; z-index: 1; min-width: 0; }
+
+	.eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.7cqw;
+		font-family: var(--mono);
+		font-size: 1.42cqw;
+		font-weight: 500;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--signal);
+		margin-bottom: 1.7cqw;
+	}
+	.eyebrow::before {
+		content: '';
+		width: 1.4cqw;
+		height: 1.4cqw;
+		border-radius: 50%;
+		background: var(--signal);
+		box-shadow: 0 0 0 0.42cqw rgba(38, 224, 180, 0.16);
+	}
+
+	h1 {
+		font-family: var(--display);
+		font-size: 6.3cqw;
+		font-weight: 800;
+		line-height: 0.98;
+		letter-spacing: -0.035em;
+		color: var(--on-ink);
+	}
+	h1 em { font-style: normal; color: var(--signal); }
+
+	p {
+		margin-top: 1.9cqw;
+		font-size: 2.02cqw;
+		font-weight: 500;
+		line-height: 1.45;
+		color: var(--on-ink-muted);
+		max-width: 46cqw;
+	}
+
+	/* The product chrome: the actual envelope this plugin emits. */
+	.envelope {
+		position: relative;
+		z-index: 1;
+		width: 33cqw;
+		border-radius: 1.7cqw;
+		background: linear-gradient(160deg, #16202f, #0b111c);
+		border: 0.13cqw solid rgba(148, 172, 205, 0.2);
+		box-shadow: 0 2.6cqw 5.2cqw rgba(0, 0, 0, 0.55);
+		overflow: hidden;
+	}
+	.envelope__bar {
+		display: flex;
+		align-items: center;
+		gap: 0.85cqw;
+		padding: 1.15cqw 1.5cqw;
+		border-bottom: 0.13cqw solid rgba(148, 172, 205, 0.14);
+		background: rgba(255, 255, 255, 0.022);
+	}
+	.dot { width: 0.88cqw; height: 0.88cqw; border-radius: 50%; background: #2b3648; }
+	.dot--a { background: #ff6f5e; }
+	.dot--b { background: #ffc453; }
+	.dot--c { background: var(--signal); }
+	.envelope__path {
+		margin-left: 0.5cqw;
+		font-family: var(--mono);
+		font-size: 1.16cqw;
+		color: #7f93ad;
+	}
+	.envelope__body {
+		padding: 1.5cqw 1.7cqw 1.8cqw;
+		font-family: var(--mono);
+		font-size: 1.24cqw;
+		line-height: 1.72;
+		color: #b8c8dc;
+		white-space: pre;
+	}
+	.k { color: #6b8cff; }
+	.s { color: var(--signal); }
+	.n { color: #ffc453; }
+</style>
+</head>
+<body>
+	<div class="banner">
+		<div class="copy">
+			<span class="eyebrow">Headless WordPress</span>
+			<h1>A contract,<br>not a <em>payload</em>.</h1>
+			<p>Versioned article delivery with surrogate-key purges on every change.</p>
+		</div>
+
+		<div class="envelope">
+			<div class="envelope__bar">
+				<span class="dot dot--a"></span>
+				<span class="dot dot--b"></span>
+				<span class="dot dot--c"></span>
+				<span class="envelope__path">GET /wp-json/hdp/v1/articles/5</span>
+			</div>
+			<div class="envelope__body">{
+  <span class="k">"meta"</span>: {
+    <span class="k">"contractVersion"</span>: <span class="n">1</span>,
+    <span class="k">"generatedAt"</span>: <span class="s">"2026-07-20T19:50Z"</span>
+  },
+  <span class="k">"data"</span>: {
+    <span class="k">"id"</span>: <span class="n">5</span>,
+    <span class="k">"slug"</span>: <span class="s">"governed-models"</span>,
+    <span class="k">"tags"</span>: [<span class="s">"architecture"</span>]
+  }
+}</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -62,6 +62,11 @@ are read-only.
 Breaking changes bump `meta.contractVersion`. Consumers check that field and
 refuse a version they were not written for.
 
+== Screenshots ==
+
+1. The versioned envelope and the article contract consumers code against.
+2. The exact surrogate-key set computed for each content change.
+
 == Changelog ==
 
 = 0.1.0 =

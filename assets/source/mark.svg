@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Hybrid Delivery">
+	<!--
+		The mark: an origin node on the left, three propagation arcs opening to the
+		right. One published article leaving the store for every edge that caches
+		it. The arcs step down in opacity and up in radius so the motion reads at
+		128px, where a literal illustration would turn to mud.
+	-->
+	<defs>
+		<linearGradient id="field" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0" stop-color="#131b29"/>
+			<stop offset="1" stop-color="#070c15"/>
+		</linearGradient>
+		<linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0" stop-color="#26e0b4" stop-opacity="0.55"/>
+			<stop offset="1" stop-color="#6b8cff" stop-opacity="0.25"/>
+		</linearGradient>
+	</defs>
+
+	<rect width="256" height="256" rx="58" fill="url(#field)"/>
+	<rect x="1" y="1" width="254" height="254" rx="57" fill="none" stroke="url(#edge)" stroke-width="2"/>
+
+	<!-- Propagation arcs, widest and faintest furthest from the origin. -->
+	<g fill="none" stroke="#26e0b4" stroke-linecap="round">
+		<path d="M96 62 A 74 74 0 0 1 96 194" stroke-width="13" opacity="0.24"/>
+		<path d="M92 82 A 52 52 0 0 1 92 174" stroke-width="13" opacity="0.5"/>
+		<path d="M88 102 A 30 30 0 0 1 88 154" stroke-width="13" opacity="0.92"/>
+	</g>
+
+	<!-- Origin node: the canonical copy everything else is derived from. -->
+	<circle cx="72" cy="128" r="21" fill="#26e0b4"/>
+	<circle cx="72" cy="128" r="8" fill="#04140f"/>
+</svg>

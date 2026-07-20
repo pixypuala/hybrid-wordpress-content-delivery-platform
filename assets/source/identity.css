@@ -1,0 +1,76 @@
+/*
+ * Hybrid Delivery — visual identity.
+ *
+ * Every value the marketing assets and the plugin's own UI use lives here as a
+ * token. Nothing downstream may introduce a raw colour, size, or radius.
+ *
+ * Direction: "wire". This plugin is infrastructure — a versioned contract on the
+ * wire and a purge signal fanning out to the edge — so the identity is
+ * instrument-panel, not brochure: a near-black field, precise hairlines, one
+ * high-voltage signal colour, and monospace wherever the contract itself is
+ * shown. It deliberately avoids the warm editorial register of the publishing
+ * plugin and the amber caution register of the commerce plugin; three products
+ * in one portfolio must not read as one template recoloured.
+ */
+
+@font-face {
+	font-family: 'Manrope';
+	src: url('fonts/Manrope.ttf') format('truetype');
+	font-weight: 200 800;
+	font-display: block;
+}
+
+@font-face {
+	font-family: 'JetBrains Mono';
+	src: url('fonts/JetBrainsMono.ttf') format('truetype');
+	font-weight: 100 800;
+	font-display: block;
+}
+
+:root {
+	/* Surfaces — near-black with a blue cast, never flat #000. */
+	--ink: #060a12;
+	--surface: #0c121d;
+	--surface-raised: #131b29;
+	--surface-line: #1e2939;
+	--hairline: rgba(148, 172, 205, 0.16);
+
+	/* Signal — used scarcely on marks and hairlines, generously on one band. */
+	--signal: #26e0b4;
+	--signal-deep: #0e9c7c;
+	--relay: #6b8cff;
+
+	/* Text */
+	--on-ink: #f2f7fb;
+	--on-ink-muted: #93a6bf;
+	--on-signal: #04140f;
+
+	/* Type */
+	--display: 'Manrope', system-ui, sans-serif;
+	--mono: 'JetBrains Mono', ui-monospace, monospace;
+
+	/* Radius — hierarchical: chips, cards, tiles. */
+	--r-sm: 6px;
+	--r-md: 10px;
+	--r-lg: 18px;
+	--r-tile: 22.5%;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: var(--ink);
+	color: var(--on-ink);
+	font-family: var(--display);
+	-webkit-font-smoothing: antialiased;
+}
+
+/* The mark: a source node with three propagation arcs — content leaving the
+   origin for the edge. Drawn from geometry so it stays crisp at 128px. */
+.mark {
+	display: block;
+}
